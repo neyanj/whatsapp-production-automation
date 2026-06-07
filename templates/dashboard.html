@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        WhatsApp Automation Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ================================= -->
+    <!-- NAVBAR -->
+    <!-- ================================= -->
+
+    <div class="navbar">
+
+        <h1>
+            WhatsApp Automation Dashboard
+        </h1>
+
+        <div class="nav-links">
+
+            <a href="/">
+                Admin Panel
+            </a>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ================================= -->
+    <!-- ANALYTICS -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            System Analytics
+        </h2>
+
+        <div class="grid">
+
+            <!-- TOTAL -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    {{ analytics.total }}
+                </h2>
+
+                <p>
+                    Total Tasks
+                </p>
+
+            </div>
+
+            <!-- SENT -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    {{ analytics.sent }}
+                </h2>
+
+                <p>
+                    Messages Sent
+                </p>
+
+            </div>
+
+            <!-- FAILED -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    {{ analytics.failed }}
+                </h2>
+
+                <p>
+                    Failed Tasks
+                </p>
+
+            </div>
+
+            <!-- AVG -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    {{ analytics.avg_time }}
+                    sec
+                </h2>
+
+                <p>
+                    Average Processing Time
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================================= -->
+    <!-- RECENT TASKS -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Recent Tasks
+        </h2>
+
+        <div class="card">
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Recipient</th>
+
+                        <th>Type</th>
+
+                        <th>Status</th>
+
+                        <th>Schedule</th>
+
+                        <th>Created</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for task in tasks %}
+
+                    <tr>
+
+                        <td>
+                            {{ task.id }}
+                        </td>
+
+                        <td>
+                            {{ task.recipient }}
+                        </td>
+
+                        <td>
+                            {{ task.recipient_type }}
+                        </td>
+
+                        <td>
+
+                            {% if task.status == "PENDING" %}
+
+                                <span class="badge badge-pending">
+                                    PENDING
+                                </span>
+
+                            {% elif task.status == "SENT" %}
+
+                                <span class="badge badge-sent">
+                                    SENT
+                                </span>
+
+                            {% elif task.status == "FAILED" %}
+
+                                <span class="badge badge-failed">
+                                    FAILED
+                                </span>
+
+                            {% elif task.status == "PROCESSING" %}
+
+                                <span class="badge badge-processing">
+                                    PROCESSING
+                                </span>
+
+                            {% else %}
+
+                                {{ task.status }}
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if task.schedule_time %}
+
+                                {{ task.schedule_time }}
+
+                            {% else %}
+
+                                Instant
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ task.created_at }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================================= -->
+    <!-- LOGS -->
+    <!-- ================================= -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            Recent Logs
+        </h2>
+
+        <div class="card">
+
+            <div class="log-panel">
+
+                {% for log in logs %}
+
+                    <div class="log-line">
+
+                        [{{ log.timestamp }}]
+
+                        TASK {{ log.task_id }}
+
+                        →
+
+                        {{ log.status }}
+
+                        {% if log.processing_time %}
+
+                            | {{ log.processing_time }} sec
+
+                        {% endif %}
+
+                        {% if log.remark %}
+
+                            | {{ log.remark }}
+
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

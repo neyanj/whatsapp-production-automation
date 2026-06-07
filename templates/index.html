@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>WhatsApp Automation Admin</title>
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 40px;
+        }
+
+        textarea,
+        input {
+
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 20px;
+
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+
+            background: #0b5cff;
+            color: white;
+
+            border: none;
+
+            padding: 12px 20px;
+
+            border-radius: 5px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #0847c2;
+        }
+
+        table {
+
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background: #efefef;
+        }
+
+        .nav {
+            margin-bottom: 30px;
+        }
+
+        .nav a {
+
+            text-decoration: none;
+            margin-right: 20px;
+            color: #0b5cff;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .status-sent {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-failed {
+            color: red;
+            font-weight: bold;
+        }
+
+        .upload-box {
+
+            border: 2px dashed #ccc;
+            padding: 20px;
+            border-radius: 8px;
+
+            margin-bottom: 30px;
+            background: #fafafa;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ===================================== -->
+    <!-- NAVIGATION -->
+    <!-- ===================================== -->
+
+    <div class="nav">
+
+        <a href="/">Admin Panel</a>
+
+        <a href="/dashboard">
+            Analytics Dashboard
+        </a>
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- PAGE TITLE -->
+    <!-- ===================================== -->
+
+    <h1>WhatsApp Automation Admin</h1>
+
+    <p>
+        Upload tasks or create tasks manually.
+    </p>
+
+    <!-- ===================================== -->
+    <!-- EXCEL UPLOAD -->
+    <!-- ===================================== -->
+
+    <div class="upload-box">
+
+        <h2>Bulk Excel Upload</h2>
+
+        <form action="/upload"
+              method="POST"
+              enctype="multipart/form-data">
+
+            <input type="file"
+                   name="file"
+                   required>
+
+            <button type="submit">
+                Upload Excel
+            </button>
+
+        </form>
+
+        <p>
+
+            Required Excel Columns:
+
+        </p>
+
+        <ul>
+
+            <li>recipient</li>
+
+            <li>message</li>
+
+            <li>schedule_time</li>
+
+        </ul>
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- MANUAL TASK FORM -->
+    <!-- ===================================== -->
+
+    <h2>Create Manual Task</h2>
+
+    <form method="POST">
+
+        <!-- RECIPIENT -->
+
+        <label>
+            Recipient (Group or Number)
+        </label>
+
+        <textarea
+                name="recipient"
+                rows="5"
+                placeholder="One per line"
+                required></textarea>
+
+        <!-- MESSAGE -->
+
+        <label>Message</label>
+
+        <textarea
+                name="message"
+                rows="6"
+                placeholder="Enter message"
+                required></textarea>
+
+        <!-- SCHEDULE -->
+
+        <label>
+    Schedule Date
+</label>
+
+<input
+    type="date"
+    name="schedule_date">
+
+<label>
+    Schedule Time
+</label>
+
+<input
+    type="time"
+    name="schedule_clock">
+
+        <!-- SUBMIT -->
+
+        <button type="submit">
+
+            Create Task
+
+        </button>
+
+    </form>
+
+    <!-- ===================================== -->
+    <!-- RECENT TASKS -->
+    <!-- ===================================== -->
+
+    <h2>Recent Tasks</h2>
+
+    <table>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Recipient</th>
+
+            <th>Type</th>
+
+            <th>Status</th>
+
+            <th>Created</th>
+
+        </tr>
+
+        {% for task in tasks %}
+
+        <tr>
+
+            <td>{{ task.id }}</td>
+
+            <td>{{ task.recipient }}</td>
+
+            <td>{{ task.recipient_type }}</td>
+
+            <td>
+
+                {% if task.status == "PENDING" %}
+
+                    <span class="status-pending">
+                        {{ task.status }}
+                    </span>
+
+                {% elif task.status == "SENT" %}
+
+                    <span class="status-sent">
+                        {{ task.status }}
+                    </span>
+
+                {% elif task.status == "FAILED" %}
+
+                    <span class="status-failed">
+                        {{ task.status }}
+                    </span>
+
+                {% else %}
+
+                    {{ task.status }}
+
+                {% endif %}
+
+            </td>
+
+            <td>{{ task.created_at }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+
+</html>

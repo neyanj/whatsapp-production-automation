@@ -1,0 +1,29 @@
+whatsapp_automation/
+│
+├── app.py
+├── worker.py
+├── config.py
+├── requirements.txt
+│
+├── data/
+│   └── automation.db
+│
+├── uploads/
+│
+├── core/
+│   ├── db.py
+│   ├── uploader.py
+│   ├── validator.py
+│   ├── queue_manager.py
+│   ├── sender.py
+│   ├── analytics.py
+│   ├── logger.py
+│   ├── scheduler.py
+│   └── driver_manager.py
+│
+├── templates/
+│   ├── index.html
+│   └── dashboard.html
+│
+└── static/
+    └── style.css

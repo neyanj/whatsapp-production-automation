@@ -1,0 +1,8 @@
+Flask
+pandas
+openpyxl
+selenium
+webdriver-manager
+numpy
+python-dotenv
+schedule
